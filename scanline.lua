@@ -1,18 +1,4 @@
-local pixelList = {}
-
-local function drawPixel(x,y)
-  table.insert(pixelList, {x,y})
-end
-
-local function clear()
-
-end
-
-local function drawBuffer()
-
-end
-
--- Function to generate Braille characters based on binary patterns
+-- 000
 function generateBrailleCharacters()
     local brailleCharacters = {}
 
