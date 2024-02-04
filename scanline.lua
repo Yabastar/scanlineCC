@@ -12,41 +12,28 @@ local function drawBuffer()
 
 end
 
--- Function to convert coordinates to Braille characters
-function convertToBraille(coordinates)
-    local emptyCharacter = "\127"
-    local filledCharacter = "\160"
+-- Function to generate Braille characters based on binary patterns
+function generateBrailleCharacters()
+    local brailleCharacters = {}
 
-    local maxX, maxY = 0, 0
+    for i = 0, 31 do
+        local binaryPattern = string.format("%05d", tonumber(string.format("%b", i)))
+        local brailleChar = "\128"
 
-    -- Find maximum x and y coordinates
-    for _, coord in ipairs(coordinates) do
-        local x, y = coord[1], coord[2]
-        maxX = math.max(maxX, x)
-        maxY = math.max(maxY, y)
-    end
-
-    -- Initialize the image with empty characters
-    local image = {}
-    for i = 1, maxY do
-        image[i] = {}
-        for j = 1, maxX do
-            table.insert(image[i], emptyCharacter)
+        for j = 1, 6 do
+            local bit = tonumber(binaryPattern:sub(j, j))
+            brailleChar = brailleChar .. (bit == 1 and "1" or "0")
         end
+
+        table.insert(brailleCharacters, string.char(tonumber(brailleChar, 2)))
     end
 
-    -- Mark specified coordinates with filled Braille characters
-    for _, coord in ipairs(coordinates) do
-        local x, y = coord[1], coord[2]
-        image[y][x] = filledCharacter
-    end
-
-    -- Print the resulting image
-    for _, row in ipairs(image) do
-        print(table.concat(row))
-    end
+    return brailleCharacters
 end
 
--- Example usage
-local coordinates = {{1, 1}, {2, 2}, {3, 3}, {4, 4}, {5, 5}}
-print(convertToBraille(coordinates))
+-- Print Braille characters from "\129" to "\160"
+local brailleChars = generateBrailleCharacters()
+for i, char in ipairs(brailleChars) do
+    print(i + 128, char)
+end
+
